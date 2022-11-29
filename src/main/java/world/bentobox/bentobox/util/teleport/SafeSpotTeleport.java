@@ -1,18 +1,6 @@
 package world.bentobox.bentobox.util.teleport;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.ChunkSnapshot;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -20,12 +8,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.eclipse.jdt.annotation.Nullable;
-
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.util.Pair;
 import world.bentobox.bentobox.util.Util;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A class that calculates finds a safe spot asynchronously and then teleports the player there.
@@ -75,12 +69,14 @@ public class SafeSpotTeleport {
         this.world = Objects.requireNonNull(location.getWorld());
         this.maxHeight = world.getMaxHeight() - 20;
         this.cancelIfFail = builder.isCancelIfFail();
+        this.location.setWorld(Bukkit.getWorld("bskyblock_world"));
         // Try to go
         Util.getChunkAtAsync(location).thenRun(() -> tryToGo(builder.getFailureMessage()));
     }
 
     void tryToGo(String failureMessage) {
         if (plugin.getIslands().isSafeLocation(location)) {
+            location.setWorld(Bukkit.getWorld("bskyblock_world"));
             if (portal) {
                 // If the desired location is safe, then that's where you'll go if there's no portal
                 bestSpot = location;
@@ -176,11 +172,13 @@ public class SafeSpotTeleport {
     }
 
     void makeAndTeleport(Material m) {
+        location.setWorld(Bukkit.getWorld("bskyblock_world"));
         location.getBlock().getRelative(BlockFace.DOWN).setType(m, false);
         location.getBlock().setType(Material.AIR, false);
         location.getBlock().getRelative(BlockFace.UP).setType(Material.AIR, false);
         location.getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.UP).setType(m, false);
         Util.teleportAsync(entity, location.clone().add(new Vector(0.5D, 0D, 0.5D))).thenRun(() -> {
+            location.setWorld(Bukkit.getWorld("bskyblock_world"));
             if (runnable != null) Bukkit.getScheduler().runTask(plugin, runnable);
             result.complete(true);
         });
@@ -197,6 +195,7 @@ public class SafeSpotTeleport {
         maxRadius = Math.min(MAX_RADIUS, maxRadius);
         int x = location.getBlockX();
         int z = location.getBlockZ();
+        location.setWorld(Bukkit.getWorld("bskyblock_world"));
         // Create ever increasing squares around the target location
         int radius = 0;
         do {
@@ -212,6 +211,7 @@ public class SafeSpotTeleport {
 
     private void addChunk(List<Pair<Integer, Integer>> chunksToScan, Pair<Integer, Integer> blockCoord, Pair<Integer, Integer> chunkCoord) {
         if (!chunksToScan.contains(chunkCoord) && plugin.getIslands().getIslandAt(location).map(is -> is.inIslandSpace(blockCoord)).orElse(true)) {
+            location.setWorld(Bukkit.getWorld("bskyblock_world"));
             chunksToScan.add(chunkCoord);
         }
     }
@@ -221,6 +221,7 @@ public class SafeSpotTeleport {
      * @return true if a safe spot was found
      */
     boolean scanChunk(ChunkSnapshot chunk) {
+        location.setWorld(Bukkit.getWorld("bskyblock_world"));
         int startY = location.getBlockY();
         int minY = world.getMinHeight();
         int maxY = 60; // Just a dummy value
@@ -276,6 +277,7 @@ public class SafeSpotTeleport {
      * Teleports entity to the safe spot
      */
     void teleportEntity(final Location loc) {
+        loc.setWorld(Bukkit.getWorld("bskyblock_world"));
         task.cancel();
         // Return to main thread and teleport the player
         Bukkit.getScheduler().runTask(plugin, () -> {
