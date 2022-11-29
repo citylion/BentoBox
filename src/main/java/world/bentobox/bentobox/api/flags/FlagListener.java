@@ -278,9 +278,9 @@ public abstract class FlagListener implements Listener {
      * @return true if PVP is allowed, false if not
      */
     protected boolean PVPAllowed(Location location) {
-        return plugin.getIslands().getIslandAt(location).map(i -> i.isAllowed(this.getFlag(location.getWorld()))).orElse(false);
+        return true;
     }
-
+    /*
     protected Flag getFlag(World w) {
         return switch (w.getEnvironment()) {
         case NETHER -> Flags.PVP_NETHER;
@@ -288,5 +288,5 @@ public abstract class FlagListener implements Listener {
         default -> Flags.PVP_OVERWORLD;
         };
     }
-
+    */
 }

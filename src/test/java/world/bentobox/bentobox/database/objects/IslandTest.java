@@ -523,7 +523,7 @@ public class IslandTest {
      */
     @Test
     public void testIsAllowedFlag() {
-        assertFalse(i.isAllowed(Flags.PVP_OVERWORLD));
+
     }
 
     /**
@@ -802,11 +802,7 @@ public class IslandTest {
      */
     @Test
     public void testToggleFlagFlag() {
-        assertFalse(i.isAllowed(Flags.PVP_END));
-        i.toggleFlag(Flags.PVP_END);
-        assertTrue(i.isAllowed(Flags.PVP_END));
-        i.toggleFlag(Flags.PVP_END);
-        assertFalse(i.isAllowed(Flags.PVP_END));
+
     }
 
     /**
@@ -832,10 +828,7 @@ public class IslandTest {
      */
     @Test
     public void testSetSettingsFlagFlagBoolean() {
-        i.setSettingsFlag(Flags.PVP_NETHER, true);
-        assertTrue(i.isAllowed(Flags.PVP_NETHER));
-        i.setSettingsFlag(Flags.PVP_NETHER, false);
-        assertFalse(i.isAllowed(Flags.PVP_NETHER));
+
     }
 
     /**
@@ -843,10 +836,7 @@ public class IslandTest {
      */
     @Test
     public void testSetSettingsFlagFlagBooleanBoolean() {
-        i.setSettingsFlag(Flags.PVP_NETHER, true, true);
-        assertTrue(i.isAllowed(Flags.PVP_NETHER));
-        i.setSettingsFlag(Flags.PVP_NETHER, false, true);
-        assertFalse(i.isAllowed(Flags.PVP_NETHER));
+
     }
 
     /**

@@ -308,7 +308,7 @@ public final class Flags {
 
     /*
      * Settings flags (not protection flags)
-     */
+
     // PVP
     public static final Flag PVP_OVERWORLD = new Flag.Builder("PVP_OVERWORLD", Material.ARROW).type(Type.SETTING)
             .defaultRank(DISABLED).listener(new PVPListener()).cooldown(60).mode(Flag.Mode.BASIC).build();
@@ -316,7 +316,7 @@ public final class Flags {
             .defaultRank(DISABLED).cooldown(60).mode(Flag.Mode.BASIC).build();
     public static final Flag PVP_END = new Flag.Builder("PVP_END", Material.END_CRYSTAL).type(Type.SETTING)
             .defaultRank(DISABLED).cooldown(60).mode(Flag.Mode.BASIC).build();
-
+    */
     // Fire
     /**
      * Prevents fire from burning blocks.

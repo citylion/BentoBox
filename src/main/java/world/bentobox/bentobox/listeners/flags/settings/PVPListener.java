@@ -71,7 +71,7 @@ public class PVPListener extends FlagListener {
                 e.setCancelled(true);
             } else {
                 // PVP check
-                respond(e, e.getDamager(), e.getEntity(), getFlag(e.getEntity().getWorld()));
+                //respond(e, e.getDamager(), e.getEntity(), getFlag(e.getEntity().getWorld()));
             }
         }
     }
@@ -82,6 +82,8 @@ public class PVPListener extends FlagListener {
      * @param damager - entity doing the damaging
      * @param flag - flag
      */
+
+    /*
     private void respond(Cancellable e, Entity damager, Entity hurtEntity, Flag flag) {
         // Get the attacker
         if (damager instanceof Player) {
@@ -98,65 +100,20 @@ public class PVPListener extends FlagListener {
             processDamage(e, damager, shooter, hurtEntity, flag);
         }
     }
+     */
 
     private void processDamage(Cancellable e, Entity damager, Player shooter, Entity hurtEntity, Flag flag) {
         // Allow self damage
-        if (hurtEntity.equals(shooter) || shooter == null) {
-            return;
-        }
-        User user = User.getInstance(shooter);
-        if (!checkIsland((Event)e, shooter, damager.getLocation(), flag)) {
-            damager.setFireTicks(0);
-            hurtEntity.setFireTicks(0);
-            user.notify(getFlag(damager.getWorld()).getHintReference());
-            e.setCancelled(true);
-        }
-
+        return;
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onFishing(PlayerFishEvent e) {
-        if (e.getCaught() instanceof Player c && getPlugin().getIWM().inWorld(c.getLocation())) {
-            // Allow self-inflicted damage or NPC damage
-            if (c.equals(e.getPlayer()) || c.hasMetadata("NPC")) {
-                return;
-            }
-            // Is PVP allowed here?
-            if (this.PVPAllowed(c.getLocation())) {
-                return;
-            }
-            // Protect visitors
-            if (protectedVisitor(c)) {
-                User.getInstance(e.getPlayer()).notify(Flags.INVINCIBLE_VISITORS.getHintReference());
-                e.setCancelled(true);
-            } else if (!checkIsland(e, e.getPlayer(), c.getLocation(), getFlag(c.getWorld()))) {
-                e.getHook().remove();
-                User.getInstance(e.getPlayer()).notify(getFlag(c.getWorld()).getHintReference());
-                e.setCancelled(true);
-            }
-        }
-    }
 
     /**
      * Checks for splash damage. Remove damage if it should not affect.
      * @param e - event
      */
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled=true)
-    public void onSplashPotionSplash(final PotionSplashEvent e) {
-        if (e.getEntity().getShooter() instanceof Player p && p != null && getPlugin().getIWM().inWorld(e.getEntity().getWorld())) {
-            User user = User.getInstance(p);
-            // Is PVP allowed here?
-            if (this.PVPAllowed(e.getEntity().getLocation())) {
-                return;
-            }
-            // Run through affected entities and cancel the splash for protected players
-            for (LivingEntity le : e.getAffectedEntities()) {
-                if (!le.getUniqueId().equals(user.getUniqueId()) && blockPVP(user, le, e, getFlag(e.getEntity().getWorld()))) {
-                    e.setIntensity(le, 0);
-                }
-            }
-        }
-    }
+
 
     /**
      * Check if PVP should be blocked or not
@@ -166,25 +123,6 @@ public class PVPListener extends FlagListener {
      * @param flag - flag to check
      * @return true if PVP should be blocked otherwise false
      */
-    private boolean blockPVP(User user, LivingEntity le, Event e, Flag flag) {
-        // Check for self-inflicted damage or Citizen NPCs
-        if (le.equals(user.getPlayer()) || le.hasMetadata("NPC")) {
-            return false;
-        }
-        if (le instanceof Player) {
-            // Protect visitors
-            if (protectedVisitor(le)) {
-                user.notify(Flags.INVINCIBLE_VISITORS.getHintReference());
-                return true;
-            }
-            // Check if PVP is allowed or not
-            if (!checkIsland(e, user.getPlayer(), le.getLocation(), flag)) {
-                user.notify(getFlag(le.getWorld()).getHintReference());
-                return true;
-            }
-        }
-        return false;
-    }
 
     private boolean protectedVisitor(LivingEntity entity) {
         return getPlugin().getIWM().getIvSettings(entity.getWorld()).contains(DamageCause.ENTITY_ATTACK.name())
@@ -201,33 +139,12 @@ public class PVPListener extends FlagListener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onLingeringPotionDamage(AreaEffectCloudApplyEvent e) {
-        if (thrownPotions.containsKey(e.getEntity().getEntityId())) {
-            User user = User.getInstance(thrownPotions.get(e.getEntity().getEntityId()));
-            // Run through affected entities and delete them if they are safe
-            e.getAffectedEntities().removeIf(le -> !le.getUniqueId().equals(user.getUniqueId()) && blockPVP(user, le, e, getFlag(e.getEntity().getWorld())));
-        }
-    }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
     public void onPlayerShootFireworkEvent(final EntityShootBowEvent e) {
         // Only care about players shooting fireworks
         if (e.getEntity() instanceof Player && (e.getProjectile() instanceof Firework)) {
             firedFireworks.put(e.getProjectile(), (Player)e.getEntity());
-        }
-    }
-
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onPVPFlagToggle(final FlagSettingChangeEvent e) {
-        Flag flag = e.getEditedFlag();
-        // Only care about PVP Flags
-        if (Flags.PVP_OVERWORLD.equals(flag) || Flags.PVP_NETHER.equals(flag) || Flags.PVP_END.equals(flag)) {
-            String message = "protection.flags." + flag.getID() + "." + (e.isSetTo() ? "enabled" : "disabled");
-            // Send the message to visitors
-            e.getIsland().getVisitors().forEach(visitor -> User.getInstance(visitor).sendMessage(message));
-            // Send the message to players on the island
-            e.getIsland().getPlayersOnIsland().forEach(player -> User.getInstance(player).sendMessage(message));
         }
     }
 
@@ -254,15 +171,6 @@ public class PVPListener extends FlagListener {
                 return;
             }
 
-            if (island.isAllowed(Flags.PVP_OVERWORLD)) {
-                alertUser(e.getPlayer(), Flags.PVP_OVERWORLD);
-            }
-            if (island.isAllowed(Flags.PVP_NETHER)) {
-                alertUser(e.getPlayer(), Flags.PVP_NETHER);
-            }
-            if (island.isAllowed(Flags.PVP_END)) {
-                alertUser(e.getPlayer(), Flags.PVP_END);
-            }
         });
     }
 

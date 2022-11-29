@@ -1,8 +1,5 @@
 package world.bentobox.bentobox;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.generator.ChunkGenerator;
@@ -11,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-
 import world.bentobox.bentobox.api.configuration.Config;
 import world.bentobox.bentobox.api.events.BentoBoxReadyEvent;
 import world.bentobox.bentobox.api.localization.TextVariables;
@@ -23,30 +19,15 @@ import world.bentobox.bentobox.hooks.MultiverseCoreHook;
 import world.bentobox.bentobox.hooks.MyWorldsHook;
 import world.bentobox.bentobox.hooks.VaultHook;
 import world.bentobox.bentobox.hooks.placeholders.PlaceholderAPIHook;
-import world.bentobox.bentobox.listeners.BannedCommands;
-import world.bentobox.bentobox.listeners.BlockEndDragon;
-import world.bentobox.bentobox.listeners.DeathListener;
-import world.bentobox.bentobox.listeners.JoinLeaveListener;
-import world.bentobox.bentobox.listeners.PanelListenerManager;
+import world.bentobox.bentobox.listeners.*;
 import world.bentobox.bentobox.listeners.teleports.EntityTeleportListener;
 import world.bentobox.bentobox.listeners.teleports.PlayerTeleportListener;
-import world.bentobox.bentobox.listeners.StandardSpawnProtectionListener;
-import world.bentobox.bentobox.managers.AddonsManager;
-import world.bentobox.bentobox.managers.BlueprintsManager;
-import world.bentobox.bentobox.managers.CommandsManager;
-import world.bentobox.bentobox.managers.FlagsManager;
-import world.bentobox.bentobox.managers.HooksManager;
-import world.bentobox.bentobox.managers.IslandChunkDeletionManager;
-import world.bentobox.bentobox.managers.IslandDeletionManager;
-import world.bentobox.bentobox.managers.IslandWorldManager;
-import world.bentobox.bentobox.managers.IslandsManager;
-import world.bentobox.bentobox.managers.LocalesManager;
-import world.bentobox.bentobox.managers.PlaceholdersManager;
-import world.bentobox.bentobox.managers.PlayersManager;
-import world.bentobox.bentobox.managers.RanksManager;
-import world.bentobox.bentobox.managers.WebManager;
+import world.bentobox.bentobox.managers.*;
 import world.bentobox.bentobox.util.heads.HeadGetter;
 import world.bentobox.bentobox.versions.ServerCompatibility;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Main BentoBox class
