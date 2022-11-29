@@ -1,14 +1,10 @@
 package world.bentobox.bentobox.managers.island;
 
-import java.io.IOException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.util.Vector;
-
-import world.bentobox.bentobox.BStats;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.events.IslandBaseEvent;
@@ -19,6 +15,8 @@ import world.bentobox.bentobox.api.events.island.IslandResetEvent;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.managers.BlueprintsManager;
+
+import java.io.IOException;
 
 /**
  * Create and paste a new island
@@ -212,7 +210,7 @@ public class NewIsland {
         // Set default settings
         island.setFlagsDefaults();
         // Register metrics
-        plugin.getMetrics().ifPresent(BStats::increaseIslandsCreatedCount);
+
         // Save island
         plugin.getIslands().save(island);
     }

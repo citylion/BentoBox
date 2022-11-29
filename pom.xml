@@ -212,11 +212,6 @@
             <scope>provided</scope>
         </dependency>
         <!-- Metrics -->
-        <dependency>
-            <groupId>org.bstats</groupId>
-            <artifactId>bstats-bukkit</artifactId>
-            <version>${bstats.version}</version>
-        </dependency>
         <!-- Mockito (Unit testing) -->
         <dependency>
             <groupId>org.mockito</groupId>

@@ -67,7 +67,6 @@ public class BentoBox extends JavaPlugin {
 
     // Metrics
     @Nullable
-    private BStats metrics;
 
     private Config<Settings> configObject;
 
@@ -201,8 +200,6 @@ public class BentoBox extends JavaPlugin {
         flagsManager.registerListeners();
 
         // Load metrics
-        metrics = new BStats(this);
-        metrics.registerMetrics();
 
         // Register Multiverse hook - MV loads AFTER BentoBox
         // Make sure all worlds are already registered to Multiverse.
@@ -523,10 +520,6 @@ public class BentoBox extends JavaPlugin {
      * @return an optional of the Bstats instance
      * @since 1.1
      */
-    @NonNull
-    public Optional<BStats> getMetrics() {
-        return Optional.ofNullable(metrics);
-    }
 
     /**
      * @return the {@link WebManager}.
