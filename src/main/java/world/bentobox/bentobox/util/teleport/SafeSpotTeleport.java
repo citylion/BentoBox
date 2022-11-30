@@ -17,7 +17,6 @@ import world.bentobox.bentobox.util.Util;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -66,7 +65,7 @@ public class SafeSpotTeleport {
         this.runnable = builder.getRunnable();
         this.failRunnable = builder.getFailRunnable();
         this.result = builder.getResult();
-        this.world = Objects.requireNonNull(location.getWorld());
+        this.world = Bukkit.getWorld("bskyblock_world");
         this.maxHeight = world.getMaxHeight() - 20;
         this.cancelIfFail = builder.isCancelIfFail();
         this.location.setWorld(Bukkit.getWorld("bskyblock_world"));
@@ -309,8 +308,8 @@ public class SafeSpotTeleport {
             // A portal has been found, switch to non-portal mode now
             portal = false;
         }
-        if (plugin.getIslands().checkIfSafe(world, type, space1, space2)) {
-            return safe(chunk, x, y, z, world);
+        if (plugin.getIslands().checkIfSafe(Bukkit.getWorld("bskyblock_world"), type, space1, space2)) {
+            return safe(chunk, x, y, z, Bukkit.getWorld("bskyblock_world"));
         }
         return false;
     }
