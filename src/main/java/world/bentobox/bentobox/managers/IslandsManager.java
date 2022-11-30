@@ -1,46 +1,17 @@
 package world.bentobox.bentobox.managers;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.TreeSpecies;
-import org.bukkit.World;
+import com.google.common.collect.ImmutableMap;
+import io.papermc.lib.PaperLib;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Boat;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.PufferFish;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-
-import com.google.common.collect.ImmutableMap;
-
-import io.papermc.lib.PaperLib;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.events.IslandBaseEvent;
 import world.bentobox.bentobox.api.events.island.IslandEvent;
@@ -56,6 +27,12 @@ import world.bentobox.bentobox.lists.Flags;
 import world.bentobox.bentobox.managers.island.IslandCache;
 import world.bentobox.bentobox.util.Util;
 import world.bentobox.bentobox.util.teleport.SafeSpotTeleport;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 /**
  * The job of this class is manage all island related data.
@@ -1099,15 +1076,15 @@ public class IslandsManager {
                 player.updateInventory();
             }
         }
-        this.getAsyncSafeHomeLocation(world, user, name).thenAccept(home -> {
-            Island island = getIsland(world, user);
+        this.getAsyncSafeHomeLocation(Bukkit.getWorld("bskyblock_world"), user, name).thenAccept(home -> {
+            Island island = getIsland(Bukkit.getWorld("bskyblock_world"), user);
             if (home == null) {
                 // Try to fix this teleport location and teleport the player if possible
                 new SafeSpotTeleport.Builder(plugin)
                 .entity(player)
                 .island(island)
                 .homeName(name)
-                .thenRun(() -> teleported(world, user, name, newIsland, island))
+                .thenRun(() -> teleported(Bukkit.getWorld("bskyblock_world"), user, name, newIsland, island))
                 .ifFail(() -> goingHome.remove(user.getUniqueId()))
                 .buildFuture()
                 .thenAccept(result::complete);
@@ -1120,7 +1097,7 @@ public class IslandsManager {
             PaperLib.teleportAsync(player, home).thenAccept(b -> {
                 // Only run the commands if the player is successfully teleported
                 if (Boolean.TRUE.equals(b)) {
-                    teleported(world, user, name, newIsland, island);
+                    teleported(Bukkit.getWorld("bskyblock_world"), user, name, newIsland, island);
                     result.complete(true);
                 } else {
                     // Remove from mid-teleport set
