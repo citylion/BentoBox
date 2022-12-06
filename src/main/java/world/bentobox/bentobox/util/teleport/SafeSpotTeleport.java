@@ -170,7 +170,7 @@ public class SafeSpotTeleport {
         }
     }
 
-    void makeAndTeleport(Material m) {
+    public void makeAndTeleport(Material m) {
         location.setWorld(Bukkit.getWorld("bskyblock_world"));
         location.getBlock().getRelative(BlockFace.DOWN).setType(m, false);
         location.getBlock().setType(Material.AIR, false);
