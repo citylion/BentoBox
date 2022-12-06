@@ -5,7 +5,6 @@ import java.util.List;
 
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
-import world.bentobox.bentobox.api.commands.island.team.IslandTeamCommand;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 
@@ -43,42 +42,6 @@ public abstract class DefaultPlayerCommand extends CompositeCommand {
 
         // Set up default subcommands
 
-        // Teleport commands
-        new IslandGoCommand(this);
-        new IslandSpawnCommand(this);
-
-        // Allows to create/reset island.
-        new IslandCreateCommand(this);
-        new IslandResetCommand(this);
-
-        // Displays info about the island.
-        new IslandInfoCommand(this);
-
-        // Settings related commands
-        new IslandSettingsCommand(this);
-        new IslandSetnameCommand(this);
-        new IslandResetnameCommand(this);
-        new IslandLanguageCommand(this);
-
-        // Ban related commands
-        new IslandBanCommand(this);
-        new IslandUnbanCommand(this);
-        new IslandBanlistCommand(this);
-
-        // Kicks visitors or coops/trusted from island
-        new IslandExpelCommand(this);
-
-        // Tells owner of adjacent islands
-        new IslandNearCommand(this);
-
-        // Team commands
-        new IslandTeamCommand(this);
-
-        // Home commands
-        new IslandSethomeCommand(this);
-        new IslandDeletehomeCommand(this);
-        new IslandRenamehomeCommand(this);
-        new IslandHomesCommand(this);
     }
 
 
